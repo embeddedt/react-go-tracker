@@ -28,7 +28,7 @@ const GOMap = ({ goTripData, stations }) => {
         goTripData.data?.forEach(trip => set.add(trip.Service.trim()));
         return set;
     }, [ goTripData.data ]);
-    return <MapContainer center={position} zoom={9} maxZoom={19} minZoom={9}>
+    return <MapContainer center={position} zoom={9} maxZoom={18} minZoom={9}>
         <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
