@@ -1,3 +1,7 @@
+/**
+ * The following list is based on data provided by Metrolinx.
+ */
+
 const routes = [
     {
         name: "Barrie",

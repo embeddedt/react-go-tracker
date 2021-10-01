@@ -11,7 +11,7 @@ import { getStations } from '~/common/getStations';
 import mitt from 'mitt';
 import { EventContext } from '~/components/EventContext';
 
-
+/* Ensure the actual map is not rendered server-side */
 const GOMap = dynamic(() => import('~/components/GOMap'), {
     ssr: false,
     loading: () => <Loader
@@ -23,14 +23,20 @@ const GOMap = dynamic(() => import('~/components/GOMap'), {
     />
 })
 
+/* Fetch the initial trips server-side to reduce the round-trip time for loading */
 export async function getServerSideProps() {
     const [ trips, stations ] = await Promise.all([ getAllTripsData(), getStations() ])
   
     return { props: { trips, stations } };
 }
 
+/**
+ * Top level component for the map page.
+ */
 const MapComponent = props => {
+    /* Create an event bus for the map components to use for communication */
     const [ eventBus ] = useState(() => mitt());
+    /* Refresh the list of trips every 3 seconds */
     const goTripData = useSWR('/api/go_routes/alltrips', { initialData: props.trips, refreshInterval: 3000 });
     const stations = props.stations;
     return <div className="map-container">

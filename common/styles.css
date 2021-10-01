@@ -11,9 +11,13 @@ html, body, #__next {
     height: 100%;
 }
 
+/* Train markers */
+
 .corridor-marker-image {
     border-radius: 50%;
 }
+
+/* Station markers */
 
 .station-marker-image {
     text-align: center;
@@ -42,8 +46,10 @@ html, body, #__next {
 }
 
 .leaflet-popup-content > h5 {
-    margin: 0;
+    margin: 0; /* remove unnecessary margin above trip name */
 }
+
+/* Ensure loader is centered */
 
 .tailspin-loader {
     position: fixed;
@@ -52,6 +58,7 @@ html, body, #__next {
     transform: translate(-50%, -50%);
 }
 
+/* Make popups transparent to the mouse, with the content being opaque */
 .go-trip-popup {
     pointer-events: none;
 }

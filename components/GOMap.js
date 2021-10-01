@@ -8,12 +8,16 @@ import { usePosition } from 'use-position';
 
 const position = [43.645278, -79.380556]
 
+/**
+ * Overall map component - renders the Leaflet map and all the necessary subcomponents to display stations and trains.
+ */
 const GOMap = ({ goTripData, stations }) => {
     const {
         latitude,
         longitude,
     } = usePosition(true);
     useEffect(() => {
+        /* Work around Leaflet using the wrong URLs for marker images */
         const L = require("leaflet");
         delete L.Icon.Default.prototype._getIconUrl;
     
@@ -23,6 +27,10 @@ const GOMap = ({ goTripData, stations }) => {
           shadowUrl: "/static/leaflet/marker-shadow.png"
         });
     }, []);
+    /*
+     * Get a unique list of routes currently running by trying to add each train's route to a Set, which can only
+     * contain one of each element.
+     */
     const servicesList = useMemo(() => {
         const set = new Set();
         goTripData.data?.forEach(trip => set.add(trip.Service.trim()));

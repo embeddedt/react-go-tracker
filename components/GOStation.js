@@ -8,16 +8,21 @@ import prefetch from '~/common/prefetch';
 const icon_height = 40;
 const icon_width = Math.ceil(icon_height * 0.897435897);
 
-
+/**
+ * Used to render the rows of the table which lists trips servicing a particular station.
+ */
 const StationTrips = (props) => {
     const eventBus = useEmitterContext();
     const map = useMap();
     const onClick = (tripNumber, e) => {
         e.preventDefault();
+        /* Close our own popup - the trip will open its shortly */
         map.closePopup();
+        /* Fire the open trip event for this trip - see GOMapTrip.tsx */
         eventBus.emit("open-trip", { tripCode: tripNumber });
     }
     const stationTrips = useSWR('/api/go_stations/' + props.id);
+    /* Wait for trip data to be downloaded before rendering */
     if(stationTrips.data == null)
         return null;
     return stationTrips.data.map(trip => (typeof trip.TripName != 'undefined' ? <tr key={trip.TripNumber}>
@@ -26,15 +31,19 @@ const StationTrips = (props) => {
     </tr> : null));
 };
 
-
+/**
+ * Component for rendering a station on the map. Used when the "Stations" layer is enabled.
+ */
 const GOStation = (props) => {
     const { stop_name, ATLS_LID: stationId, ATLS_LOCATIONLABEL: shortened_name, stop_lat, stop_url, stop_lon } = props;
+    /* Make a custom "icon" that will show the station name as well */
     const icon = useMemo(() => (
         require("leaflet").divIcon({
             html: `<div class="station-marker-dot"></div><span>${shortened_name}</span>`,
             className: 'station-marker-image'
         })
     ), [ shortened_name ]);
+    /* Callback for prefetching trip list on mouseover */
     const prefetchTripList = useCallback(() => {
         prefetch('/api/go_stations/' + stationId);
     }, [ stationId ]);    
