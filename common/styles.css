@@ -51,3 +51,16 @@ html, body, #__next {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.go-trip-popup {
+    pointer-events: none;
+}
+
+.go-trip-popup .leaflet-popup-content-wrapper {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.go-trip-popup .leaflet-popup-close-button, .go-trip-popup .leaflet-popup-content > * {
+    pointer-events: all;
+    pointer-events: auto;
+}

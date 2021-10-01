@@ -44,7 +44,7 @@ const GOMapTrip = (props) => {
         ref={markerRef}
         attribution="<a href='http://gotracker.ca/gotracker/web/'>GO Transit</a>"
     >
-        <Popup>
+        <Popup className="go-trip-popup">
             <h5>{props.TripName}</h5>
             <p></p>
             <ul>
