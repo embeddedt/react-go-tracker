@@ -41,6 +41,7 @@
     "maintained node versions"
   ],
   "devDependencies": {
+    "@types/luxon": "^2.0.4",
     "@types/memoizee": "^0.4.5",
     "@types/react-leaflet": "^2.5.0",
     "typescript": "^4.3.2"

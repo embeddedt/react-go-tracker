@@ -1,4 +1,5 @@
 
+import { DateTime } from 'luxon';
 import { Marker, Popup, useMap } from 'react-leaflet'
 import { useMemo, useCallback } from 'react';
 import { useEmitterContext } from '~/components/EventContext';
@@ -14,8 +15,9 @@ const icon_width = Math.ceil(icon_height * 0.897435897);
 const StationTrips = (props) => {
     const eventBus = useEmitterContext();
     const map = useMap();
-    const onClick = (tripNumber, e) => {
+    const onClick = (e) => {
         e.preventDefault();
+        const tripNumber = e.currentTarget.getAttribute("data-tripnumber");
         /* Close our own popup - the trip will open its shortly */
         map.closePopup();
         /* Fire the open trip event for this trip - see GOMapTrip.tsx */
@@ -23,12 +25,32 @@ const StationTrips = (props) => {
     }
     const stationTrips = useSWR('/api/go_stations/' + props.id);
     /* Wait for trip data to be downloaded before rendering */
+    
     if(stationTrips.data == null)
         return null;
-    return stationTrips.data.map(trip => (typeof trip.TripName != 'undefined' ? <tr key={trip.TripNumber}>
-        <td>{trip.TripName}</td>
-        <td><a onClick={onClick.bind(void 0, trip.TripNumber)} href="#">Jump to</a></td>
-    </tr> : null));
+    const actualTrips = stationTrips.data.filter(trip => typeof trip.TripName != 'undefined');
+    if(actualTrips.length < 1) {
+        return <div>Please check the schedule for available GO service.</div>;
+    }
+    return <table>
+        <thead>
+            <tr>
+                <th>Trip name</th>
+                <th>ETA</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {actualTrips.map(trip => {
+                const scheduledArrivalTime = DateTime.fromISO(trip.Scheduled);
+                return <tr key={trip.TripNumber}>
+                    <td>{trip.TripName}</td>
+                    <td title={scheduledArrivalTime.toLocaleString(DateTime.TIME_SIMPLE)}>{scheduledArrivalTime.toRelative()}</td>
+                    <td><a onClick={onClick} data-tripnumber={trip.TripNumber.toString()} href="#">Jump to</a></td>
+                </tr>;
+            })}
+        </tbody>
+    </table>;
 };
 
 /**
@@ -57,17 +79,8 @@ const GOStation = (props) => {
     >
         <Popup>
             <h5>{stop_name}</h5>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Trip name</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <StationTrips id={stationId}/>
-                </tbody>
-            </table>
+            <StationTrips id={stationId}/>
+            
         </Popup>
     </Marker>;
 };
