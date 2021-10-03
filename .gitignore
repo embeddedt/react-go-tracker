@@ -35,3 +35,7 @@ built.txt
 bugs.txt
 public/sw.js*
 public/workbox*.js*
+
+# Python
+
+env/
