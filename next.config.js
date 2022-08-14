@@ -26,7 +26,6 @@ module.exports = withPWA(withBundleAnalyzer({
         };
         return config;
     },
-    webpack5: true,
     async redirects() {
         return [
             {

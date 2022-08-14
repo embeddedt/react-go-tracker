@@ -40,6 +40,9 @@
     "not IE 11",
     "maintained node versions"
   ],
+  "overrides": {
+    "react": "$react"
+  },
   "devDependencies": {
     "@types/luxon": "^2.0.4",
     "@types/memoizee": "^0.4.5",
