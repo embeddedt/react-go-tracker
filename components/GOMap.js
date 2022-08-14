@@ -49,7 +49,7 @@ const GOMap = ({ goTripData, stations }) => {
             </LayersControl.Overlay>)}
             <LayersControl.Overlay name="Stations">
                 <LayerGroup>
-                    {stations.filter(station => station.isYard == 'false').map(station => <GOStation key={station.stop_short_name} {...station}/>)}
+                    {stations.filter(station => station.isYard == 'false').map(station => <GOStation key={station.ATLS_LID} {...station}/>)}
                 </LayerGroup>
             </LayersControl.Overlay>
         </LayersControl>
